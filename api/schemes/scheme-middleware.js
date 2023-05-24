@@ -1,42 +1,46 @@
-/*
-  Eğer `scheme_id` veritabanında yoksa:
-
-  durum 404
-  {
-    "message": "scheme_id <gerçek id> id li şema bulunamadı"
-  }
-*/
 const checkSchemeId = (req, res, next) => {
+  const { scheme_id } = req.body;
 
-}
-
-/*
-  Eğer `scheme_name` yoksa, boş string ya da string değil:
-
-  durum 400
-  {
-    "message": "Geçersiz scheme_name"
+  if (!scheme_id) {
+    return res.status(404).json({
+      message: `scheme_id ${scheme_id} id'li şema bulunamadı`,
+    });
   }
-*/
+
+  next();
+};
+
 const validateScheme = (req, res, next) => {
+  const { scheme_name } = req.body;
 
-}
-
-/*
-  Eğer `instructions` yoksa, boş string yada string değilse, ya da
-  eğer `step_number` sayı değilse ya da birden küçükse:
-
-  durum 400
-  {
-    "message": "Hatalı step"
+  if (!scheme_name || typeof scheme_name !== 'string') {
+    return res.status(400).json({
+      message: 'Geçersiz scheme_name',
+    });
   }
-*/
-const validateStep = (req, res, next) => {
 
-}
+  next();
+};
+
+const validateStep = (req, res, next) => {
+  const { instructions, step_number } = req.body;
+
+  if (
+    !instructions ||
+    typeof instructions !== 'string' ||
+    typeof step_number !== 'number' ||
+    step_number < 1
+  ) {
+    return res.status(400).json({
+      message: 'Hatalı step',
+    });
+  }
+
+  next();
+};
 
 module.exports = {
   checkSchemeId,
   validateScheme,
   validateStep,
-}
+};
